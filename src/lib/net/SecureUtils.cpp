@@ -72,7 +72,9 @@ const EVP_MD* get_digest_for_type(FingerprintType type)
     switch (type) {
         case FingerprintType::SHA1: return EVP_sha1();
         case FingerprintType::SHA256: return EVP_sha256();
-    }
+        case INVALID:
+          break;
+        }
     throw std::runtime_error("Unknown fingerprint type " + std::to_string(static_cast<int>(type)));
 }
 
@@ -156,6 +158,37 @@ FingerprintData get_pem_file_cert_fingerprint(const std::string& path, Fingerpri
     return get_ssl_cert_fingerprint(cert, type);
 }
 
+EVP_PKEY* generate_rsa_key(int key_length = 2048)
+{
+    EVP_PKEY_CTX* ctx = EVP_PKEY_CTX_new_id(EVP_PKEY_RSA, nullptr);
+    if (!ctx) {
+        throw std::runtime_error("Can't create EVP_PKEY_CTX.");
+        return NULL;
+    }
+
+    if (EVP_PKEY_keygen_init(ctx) <= 0) {
+        throw std::runtime_error("Can't initialize key generation.");
+        EVP_PKEY_CTX_free(ctx);
+        return NULL;
+    }
+
+    if (EVP_PKEY_CTX_set_rsa_keygen_bits(ctx, key_length) <= 0) {
+        throw std::runtime_error("Can't set key length.");
+        EVP_PKEY_CTX_free(ctx);
+        return NULL;
+    }
+
+    EVP_PKEY* pkey = NULL;
+    if (EVP_PKEY_keygen(ctx, &pkey) <= 0) {
+        throw std::runtime_error("Can't generate key.");
+        EVP_PKEY_CTX_free(ctx);
+        return NULL;
+    }
+
+    EVP_PKEY_CTX_free(ctx);
+    return pkey;
+}
+
 void generate_pem_self_signed_cert(const std::string& path)
 {
     auto expiration_days = 365;
@@ -166,7 +199,8 @@ void generate_pem_self_signed_cert(const std::string& path)
     }
     auto private_key_free = finally([private_key](){ EVP_PKEY_free(private_key); });
 
-    auto* rsa = RSA_generate_key(2048, RSA_F4, nullptr, nullptr);
+    /*auto* rsa = RSA_generate_key(2048, RSA_F4, nullptr, nullptr);*/
+    auto rsa = generate_rsa_key();
     if (!rsa) {
         throw std::runtime_error("Failed to generate RSA key");
     }
