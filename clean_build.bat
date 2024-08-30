@@ -2,8 +2,8 @@
 
 REM defaults - override them by creating a build_env.bat file
 set B_BUILD_TYPE=Debug
-set B_QT_ROOT=C:\Qt
-set B_QT_VER=5.11.1
+set B_QT_ROOT=I:\projects\Qt5.12.12
+set B_QT_VER=5.12.12
 set B_QT_MSVC=msvc2017_64
 set B_BONJOUR=C:\Program Files\Bonjour SDK
 
@@ -19,7 +19,7 @@ if "%VisualStudioVersion%"=="15.0" (
     echo Visual Studio version was not detected.
     echo Did you forget to run inside a VS developer prompt?
     echo Using the default cmake generator.
-    set cmake_gen=Visual Studio 16 2019
+    set cmake_gen=Visual Studio 17 2022
 )
 
 if exist build_env.bat call build_env.bat

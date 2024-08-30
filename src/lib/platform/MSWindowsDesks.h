@@ -177,7 +177,7 @@ public:
     /*!
     Synthesize a mouse move to the absolute coordinates \c x,y.
     */
-    void                fakeMouseMove(SInt32 x, SInt32 y) const;
+    void                fakeMouseMove(SInt32 x, SInt32 y, SInt32 dx, SInt32 dy) const;
 
     //! Fake mouse move
     /*!

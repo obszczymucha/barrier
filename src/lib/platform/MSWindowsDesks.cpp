@@ -316,7 +316,7 @@ MSWindowsDesks::fakeMouseButton(ButtonID button, bool press)
 }
 
 void
-MSWindowsDesks::fakeMouseMove(SInt32 x, SInt32 y) const
+MSWindowsDesks::fakeMouseMove(SInt32 x, SInt32 y, SInt32 dx, SInt32 dy) const
 {
     sendMessage(BARRIER_MSG_FAKE_MOVE,
                             static_cast<WPARAM>(x),

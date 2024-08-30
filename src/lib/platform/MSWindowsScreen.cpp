@@ -730,9 +730,9 @@ MSWindowsScreen::fakeMouseButton(ButtonID id, bool press)
 }
 
 void
-MSWindowsScreen::fakeMouseMove(SInt32 x, SInt32 y)
+MSWindowsScreen::fakeMouseMove(SInt32 x, SInt32 y, SInt32 dx, SInt32 dy)
 {
-    m_desks->fakeMouseMove(x, y);
+    m_desks->fakeMouseMove(x, y, dx, dy);
     if (m_buttons[kButtonLeft]) {
         m_draggingStarted = true;
     }
@@ -1519,7 +1519,7 @@ MSWindowsScreen::warpCursorNoFlush(SInt32 x, SInt32 y)
             // returns to the center of the screen. this could have something to do with
             // the center screen warping technique used (see comments for onMouseMove
             // definition).
-            fakeMouseMove(x, y);
+            fakeMouseMove(x, y, 0, 0);
         }
     }
 
