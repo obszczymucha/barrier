@@ -226,7 +226,7 @@ PrimaryClient::mouseUp(ButtonID)
 }
 
 void
-PrimaryClient::mouseMove(SInt32 x, SInt32 y)
+PrimaryClient::mouseMove(SInt32 x, SInt32 y, SInt32 dx, SInt32 dy)
 {
     m_screen->warpCursor(x, y);
 }

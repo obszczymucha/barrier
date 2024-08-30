@@ -121,7 +121,7 @@ public:
     Synthesize mouse events to generate mouse motion to the absolute
     screen position \c xAbs,yAbs.
     */
-    virtual void        mouseMove(SInt32 xAbs, SInt32 yAbs) = 0;
+    virtual void        mouseMove(SInt32 xAbs, SInt32 yAbs, SInt32 dx, SInt32 dy) = 0;
 
     //! Notify of mouse motion
     /*!

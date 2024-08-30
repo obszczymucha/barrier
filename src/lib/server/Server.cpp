@@ -520,7 +520,7 @@ Server::switchScreen(BaseClientProxy* dst,
 		m_events->addEvent(Event(m_events->forServer().screenSwitched(), this, info));
 	}
 	else {
-		m_active->mouseMove(x, y);
+		m_active->mouseMove(x, y, 0, 0);
 	}
 }
 
@@ -1088,7 +1088,7 @@ Server::stopRelativeMoves()
 		m_xDelta2 = 0;
 		m_yDelta2 = 0;
 		LOG((CLOG_DEBUG2 "synchronize move on %s by %d,%d", getName(m_active).c_str(), m_x, m_y));
-		m_active->mouseMove(m_x, m_y);
+		m_active->mouseMove(m_x, m_y, 0, 0);
 	}
 }
 
@@ -2050,7 +2050,7 @@ Server::onMouseMoveSecondary(SInt32 dx, SInt32 dy)
 		// warp cursor if it moved.
 		if (m_x != xOld || m_y != yOld) {
 			LOG((CLOG_DEBUG2 "move on %s to %d,%d", getName(m_active).c_str(), m_x, m_y));
-			m_active->mouseMove(m_x, m_y);
+			m_active->mouseMove(m_x, m_y, dx, dy);
 		}
 	}
 }

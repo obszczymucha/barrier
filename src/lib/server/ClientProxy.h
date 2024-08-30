@@ -75,7 +75,7 @@ public:
     virtual void        keyUp(KeyID, KeyModifierMask, KeyButton) = 0;
     virtual void        mouseDown(ButtonID) = 0;
     virtual void        mouseUp(ButtonID) = 0;
-    virtual void        mouseMove(SInt32 xAbs, SInt32 yAbs) = 0;
+    virtual void        mouseMove(SInt32 xAbs, SInt32 yAbs, SInt32 dx, SInt32 dy) = 0;
     virtual void        mouseRelativeMove(SInt32 xRel, SInt32 yRel) = 0;
     virtual void        mouseWheel(SInt32 xDelta, SInt32 yDelta) = 0;
     virtual void        screensaver(bool activate) = 0;

@@ -349,7 +349,7 @@ ClientProxy1_0::mouseUp(ButtonID button)
 }
 
 void
-ClientProxy1_0::mouseMove(SInt32 xAbs, SInt32 yAbs)
+ClientProxy1_0::mouseMove(SInt32 xAbs, SInt32 yAbs, SInt32 dx, SInt32 dy)
 {
     LOG((CLOG_DEBUG2 "send mouse move to \"%s\" %d,%d", getName().c_str(), xAbs, yAbs));
     ProtocolUtil::writef(getStream(), kMsgDMouseMove, xAbs, yAbs);

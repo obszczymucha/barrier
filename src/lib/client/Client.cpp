@@ -244,7 +244,7 @@ void
 Client::enter(SInt32 xAbs, SInt32 yAbs, UInt32, KeyModifierMask mask, bool)
 {
     m_active = true;
-    m_screen->mouseMove(xAbs, yAbs);
+    m_screen->mouseMove(xAbs, yAbs, 0, 0);
     m_screen->enter(mask);
 
     if (m_sendFileThread != NULL) {
@@ -326,9 +326,10 @@ Client::mouseUp(ButtonID id)
 }
 
 void
-Client::mouseMove(SInt32 x, SInt32 y)
+Client::mouseMove(SInt32 x, SInt32 y, SInt32 dx, SInt32 dy)
 {
-    m_screen->mouseMove(x, y);
+    LOG((CLOG_INFO "Mouse move x: %i  y: %i  dx: %i  dy: %i", x, y, dx, dy));
+    m_screen->mouseMove(x, y, dx, dy);
 }
 
 void

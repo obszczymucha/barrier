@@ -228,10 +228,10 @@ Screen::mouseUp(ButtonID button)
 }
 
 void
-Screen::mouseMove(SInt32 x, SInt32 y)
+Screen::mouseMove(SInt32 x, SInt32 y, SInt32 dx, SInt32 dy)
 {
     assert(!m_isPrimary);
-    m_screen->fakeMouseMove(x, y);
+    m_screen->fakeMouseMove(x, y, dx, dy);
 }
 
 void

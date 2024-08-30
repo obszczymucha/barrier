@@ -383,7 +383,7 @@ ServerProxy::flushCompressedMouse()
 {
     if (m_compressMouse) {
         m_compressMouse = false;
-        m_client->mouseMove(m_xMouse, m_yMouse);
+        m_client->mouseMove(m_xMouse, m_yMouse, 0, 0);
     }
     if (m_compressMouseRelative) {
         m_compressMouseRelative = false;
@@ -706,8 +706,8 @@ ServerProxy::mouseMove()
 {
     // parse
     bool ignore;
-    SInt16 x, y;
-    ProtocolUtil::readf(m_stream, kMsgDMouseMove + 4, &x, &y);
+    SInt16 x, y, dx, dy;
+    ProtocolUtil::readf(m_stream, kMsgDMouseMove + 4, &x, &y, &dx, &dy);
 
     // note if we should ignore the move
     ignore = m_ignoreMouse;
@@ -730,7 +730,7 @@ ServerProxy::mouseMove()
 
     // forward
     if (!ignore) {
-        m_client->mouseMove(x, y);
+        m_client->mouseMove(x, y, dx, dy);
     }
 }
 

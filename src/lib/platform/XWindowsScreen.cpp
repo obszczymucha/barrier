@@ -213,7 +213,7 @@ XWindowsScreen::enable()
         m_impl->XMapRaised(m_display, m_window);
 
 		// warp the mouse to the cursor center
-		fakeMouseMove(m_xCenter, m_yCenter);
+		fakeMouseMove(m_xCenter, m_yCenter, 0, 0);
 	}
 }
 
@@ -335,7 +335,7 @@ XWindowsScreen::leave()
 		warpCursor(m_xCenter, m_yCenter);
 	}
 	else {
-		fakeMouseMove(m_xCenter, m_yCenter);
+		fakeMouseMove(m_xCenter, m_yCenter, 0, 0);
 	}
 
 	// set input context focus to our window
@@ -803,7 +803,7 @@ XWindowsScreen::fakeMouseButton(ButtonID button, bool press)
 }
 
 void
-XWindowsScreen::fakeMouseMove(SInt32 x, SInt32 y)
+XWindowsScreen::fakeMouseMove(SInt32 x, SInt32 y, SInt32 dx, SInt32 dy)
 {
 	if (m_xinerama && m_xtestIsXineramaUnaware) {
         m_impl->XWarpPointer(m_display, None, m_root, 0, 0, 0, 0, x, y);
