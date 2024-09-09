@@ -1,10 +1,5 @@
 #include "platform/UsbScreen.h"
 
-/*#include "platform/XWindowsClipboard.h"*/
-/*#include "platform/XWindowsEventQueueBuffer.h"*/
-/*#include "platform/XWindowsKeyState.h"*/
-/*#include "platform/XWindowsScreenSaver.h"*/
-/*#include "platform/XWindowsUtil.h"*/
 #include "arch/Arch.h"
 #include "arch/XArch.h"
 #include "barrier/Clipboard.h"
@@ -14,6 +9,7 @@
 #include "base/Log.h"
 #include "base/Stopwatch.h"
 #include "base/TMethodEventJob.h"
+#include "platform/UsbEventQueueBuffer.h"
 #include "platform/UsbKeyState.h"
 
 #include <algorithm>
@@ -24,8 +20,8 @@ UsbScreen *UsbScreen::s_screen = NULL;
 
 UsbScreen::UsbScreen(IEventQueue *events)
     : PlatformScreen(events), m_isPrimary(true), m_isOnScreen(false), m_x(0),
-      m_y(0), m_w(0), m_h(0), m_xCenter(0), m_yCenter(0), m_xCursor(0),
-      m_yCursor(0), m_events(events) {
+      m_y(0), m_w(1920), m_h(1080), m_xCenter(1920 / 2), m_yCenter(1080 / 2),
+      m_xCursor(0), m_yCursor(0), m_events(events) {
   assert(s_screen == NULL);
 
   s_screen = this;
@@ -37,45 +33,14 @@ UsbScreen::UsbScreen(IEventQueue *events)
     s_screen = NULL;
     throw;
   }
-  /*    m_screensaver = new MSWindowsScreenSaver();*/
-  /*    m_desks       = new MSWindowsDesks(*/
-  /*                        m_isPrimary,*/
-  /*                        m_noHooks,*/
-  /*                        m_screensaver,*/
-  /*                        m_events,*/
-  /*                                       [this]() { updateKeysCB(); },*/
-  /*                        stopOnDeskSwitch);*/
-  /**/
-  /*    updateScreenShape();*/
-  /*    m_class       = createWindowClass();*/
-  /*    m_window      = createWindow(m_class, "Barrier");*/
-  /*    forceShowCursor();*/
-  /*    LOG((CLOG_DEBUG "screen shape: %d,%d %dx%d %s", m_x, m_y, m_w, m_h,
-   * m_multimon ? "(multi-monitor)" : ""));*/
-  /*    LOG((CLOG_DEBUG "window is 0x%08x", m_window));*/
-  /**/
-  /*    OleInitialize(0);*/
-  /*    m_dropWindow = createDropWindow(m_class, "DropWindow");*/
-  /*    m_dropTarget = new MSWindowsDropTarget();*/
-  /*    RegisterDragDrop(m_dropWindow, m_dropTarget);*/
-  /*}*/
-  /*catch (...) {*/
-  /*    delete m_keyState;*/
-  /*    delete m_desks;*/
-  /*    delete m_screensaver;*/
-  /*    destroyWindow(m_window);*/
-  /*    destroyClass(m_class);*/
-  /*    s_screen = NULL;*/
-  /*    throw;*/
-  /*}*/
-  /**/
-  /*// install event handlers*/
-  /*m_events->adoptHandler(Event::kSystem, m_events->getSystemTarget(),*/
-  /*                        new TMethodEventJob<MSWindowsScreen>(this,*/
-  /*                            &MSWindowsScreen::handleSystemEvent));*/
-  /**/
-  /*// install the platform event queue*/
-  /*m_events->adoptBuffer(new MSWindowsEventQueueBuffer(m_events));*/
+
+  // install event handlers
+  m_events->adoptHandler(
+      Event::kSystem, m_events->getSystemTarget(),
+      new TMethodEventJob<UsbScreen>(this, &UsbScreen::handleSystemEvent));
+
+  // install the platform event queue
+  m_events->adoptBuffer(new UsbEventQueueBuffer(m_events));
 }
 
 UsbScreen::~UsbScreen() {
