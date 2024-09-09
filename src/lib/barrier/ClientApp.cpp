@@ -42,6 +42,8 @@
 
 #if WINAPI_MSWINDOWS
 #include "platform/MSWindowsScreen.h"
+#elif BARRIER_USB_CLIENT
+#include "platform/UsbScreen.h"
 #elif WINAPI_XWINDOWS
 #include "platform/XWindowsScreen.h"
 #elif WINAPI_CARBON
@@ -163,6 +165,8 @@ ClientApp::createScreen()
 #if WINAPI_MSWINDOWS
     return new barrier::Screen(new MSWindowsScreen(
         false, args().m_noHooks, args().m_stopOnDeskSwitch, m_events), m_events);
+#elif BARRIER_USB_CLIENT
+    return new barrier::Screen(new UsbScreen(m_events), m_events);
 #elif WINAPI_XWINDOWS
     return new barrier::Screen(new XWindowsScreen(
         new XWindowsImpl(),

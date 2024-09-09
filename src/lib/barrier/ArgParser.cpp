@@ -186,6 +186,14 @@ ArgParser::parseXWindowsArg(ArgsBase& argsBase, const int& argc, const char* con
 }
 #endif
 
+#if BARRIER_USB_CLIENT
+bool
+ArgParser::parseUsbClientArg(ArgsBase& argsBase, const int& argc, const char* const* argv, int& i)
+{
+    return false;
+}
+#endif
+
 bool
 ArgParser::parsePlatformArg(ArgsBase& argsBase, const int& argc, const char* const* argv, int& i)
 {
@@ -193,6 +201,8 @@ ArgParser::parsePlatformArg(ArgsBase& argsBase, const int& argc, const char* con
     return parseMSWindowsArg(argsBase, argc, argv, i);
 #elif WINAPI_CARBON
     return parseCarbonArg(argsBase, argc, argv, i);
+#elif BARRIER_USB_CLIENT
+    return parseUsbClientArg(argsBase, argc, argv, i);
 #elif WINAPI_XWINDOWS
     return parseXWindowsArg(argsBase, argc, argv, i);
 #endif

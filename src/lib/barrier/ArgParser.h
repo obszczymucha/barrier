@@ -58,6 +58,7 @@ private:
 
     bool                parseMSWindowsArg(ArgsBase& argsBase, const int& argc, const char* const* argv, int& i);
     bool                parseCarbonArg(ArgsBase& argsBase, const int& argc, const char* const* argv, int& i);
+    bool                parseUsbClientArg(ArgsBase& argsBase, const int& argc, const char* const* argv, int& i);
     bool                parseXWindowsArg(ArgsBase& argsBase, const int& argc, const char* const* argv, int& i);
 
 private:

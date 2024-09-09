@@ -23,6 +23,8 @@
 
 #if WINAPI_MSWINDOWS
 #include "MSWindowsClientTaskBarReceiver.h"
+#elif BARRIER_USB_CLIENT
+#include "UsbClientTaskBarReceiver.h"
 #elif WINAPI_XWINDOWS
 #include "XWindowsClientTaskBarReceiver.h"
 #elif WINAPI_CARBON
