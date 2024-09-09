@@ -19,7 +19,7 @@
 UsbScreen *UsbScreen::s_screen = NULL;
 
 UsbScreen::UsbScreen(IEventQueue *events)
-    : PlatformScreen(events), m_isPrimary(true), m_isOnScreen(false), m_x(0),
+    : PlatformScreen(events), m_isPrimary(false), m_isOnScreen(false), m_x(0),
       m_y(0), m_w(1920), m_h(1080), m_xCenter(1920 / 2), m_yCenter(1080 / 2),
       m_xCursor(0), m_yCursor(0), m_events(events) {
   assert(s_screen == NULL);
@@ -40,7 +40,7 @@ UsbScreen::UsbScreen(IEventQueue *events)
       new TMethodEventJob<UsbScreen>(this, &UsbScreen::handleSystemEvent));
 
   // install the platform event queue
-  m_events->adoptBuffer(new UsbEventQueueBuffer(m_events));
+  /*m_events->adoptBuffer(new UsbEventQueueBuffer(m_events));*/
 }
 
 UsbScreen::~UsbScreen() {
@@ -97,7 +97,9 @@ void UsbScreen::fakeMouseButton(ButtonID id, bool press) {}
 
 void UsbScreen::fakeMouseMove(SInt32 x, SInt32 y) {}
 
-void UsbScreen::fakeMouseRelativeMove(SInt32 dx, SInt32 dy) const {}
+void UsbScreen::fakeMouseRelativeMove(SInt32 dx, SInt32 dy) const {
+
+}
 
 void UsbScreen::fakeMouseWheel(SInt32 xDelta, SInt32 yDelta) const {}
 

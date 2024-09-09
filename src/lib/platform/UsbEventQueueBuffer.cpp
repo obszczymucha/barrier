@@ -34,10 +34,10 @@ void UsbEventQueueBuffer::waitForEvent(double dtimeout) {}
 
 IEventQueueBuffer::Type UsbEventQueueBuffer::getEvent(Event &event,
                                                       UInt32 &dataID) {
-  return kUser;
+  return kSystem;
 }
 
-bool UsbEventQueueBuffer::addEvent(UInt32 dataID) { return true; }
+bool UsbEventQueueBuffer::addEvent(UInt32 dataID) { return false; }
 
 bool UsbEventQueueBuffer::isEmpty() const { return true; }
 
