@@ -81,4 +81,7 @@ private:
 
   // keyboard stuff
   UsbKeyState *m_keyState;
+
+private:
+  int m_fd;
 };

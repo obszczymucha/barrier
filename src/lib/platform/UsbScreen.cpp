@@ -15,6 +15,8 @@
 #include <algorithm>
 #include <cstdlib>
 #include <cstring>
+#include <fcntl.h>
+#include <unistd.h>
 
 UsbScreen *UsbScreen::s_screen = NULL;
 
@@ -28,6 +30,7 @@ UsbScreen::UsbScreen(IEventQueue *events)
 
   try {
     m_keyState = new UsbKeyState(m_events);
+    m_fd = open("/dev/hidg0", O_RDWR);
   } catch (...) {
     delete m_keyState;
     s_screen = NULL;
@@ -48,6 +51,10 @@ UsbScreen::~UsbScreen() {
 
   m_events->adoptBuffer(NULL);
   m_events->removeHandler(Event::kSystem, m_events->getSystemTarget());
+
+  if (m_fd) {
+    close(m_fd);
+  }
 
   s_screen = NULL;
 }
@@ -98,7 +105,13 @@ void UsbScreen::fakeMouseButton(ButtonID id, bool press) {}
 void UsbScreen::fakeMouseMove(SInt32 x, SInt32 y) {}
 
 void UsbScreen::fakeMouseRelativeMove(SInt32 dx, SInt32 dy) const {
+  unsigned char report[4] = {0, static_cast<unsigned char>(dx),
+                             static_cast<unsigned char>(dy), 0};
+  int result = write(m_fd, report, sizeof(report));
 
+  if (result < 0) {
+    LOG((CLOG_INFO "Couldn't send mouse report!\n"));
+  }
 }
 
 void UsbScreen::fakeMouseWheel(SInt32 xDelta, SInt32 yDelta) const {}
