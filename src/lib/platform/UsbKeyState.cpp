@@ -18,7 +18,6 @@ UsbKeyState::~UsbKeyState() {
 bool UsbKeyState::fakeCtrlAltDel() { return true; }
 
 KeyModifierMask UsbKeyState::pollActiveModifiers() const {
-  LOG((CLOG_INFO "UsbKeyState::pollActiveModifiers()"));
   KeyModifierMask state = 0;
   return state;
 }
@@ -30,12 +29,12 @@ void UsbKeyState::pollPressedKeys(KeyButtonSet &pressedKeys) const {}
 void UsbKeyState::getKeyMap(barrier::KeyMap &keyMap) {}
 
 void UsbKeyState::fakeKey(const Keystroke &k) {
-  LOG((CLOG_INFO "UsbKeyState::fakeKey()"));
+  /*LOG((CLOG_INFO "UsbKeyState::fakeKey()"));*/
 }
 
 void UsbKeyState::fakeKeyDown(KeyID id, KeyModifierMask mask,
                               KeyButton button) {
-  LOG((CLOG_INFO "UsbKeyState::fakeKeyDown(%d, %d, %d)", id, mask, button));
+  /*LOG((CLOG_INFO "UsbKeyState::fakeKeyDown(%d, %d, %d)", id, mask, button));*/
 
   UInt8 key = 0;
 
@@ -181,12 +180,120 @@ void UsbKeyState::fakeKeyDown(KeyID id, KeyModifierMask mask,
   case 40: // '
     key = 0x34;
     break;
+  case 41: // `
+    key = 0x35;
+    break;
+  case 43: // Backslash
+    key = 0x31;
+    break;
+  case 44: // Z
+    key = 0x1D;
+    break;
+  case 45: // X
+    key = 0x1B;
+    break;
+  case 46: // C
+    key = 0x06;
+    break;
+  case 47: // V
+    key = 0x19;
+    break;
+  case 48: // B
+    key = 0x05;
+    break;
+  case 49: // N
+    key = 0x11;
+    break;
+  case 50: // M
+    key = 0x10;
+    break;
+  case 51: // ,
+    key = 0x36;
+    break;
+  case 52: // .
+    key = 0x37;
+    break;
+  case 53: // /
+    key = 0x38;
+    break;
   case 58: // CapsLock
     key = 0x39;
     break;
+  case 59: // F1
+    key = 0x3A;
+    break;
+  case 60: // F2
+    key = 0x3B;
+    break;
+  case 61: // F3
+    key = 0x3C;
+    break;
+  case 62: // F4
+    key = 0x3D;
+    break;
+  case 63: // F5
+    key = 0x3E;
+    break;
+  case 64: // F6
+    key = 0x3F;
+    break;
+  case 65: // F7
+    key = 0x40;
+    break;
+  case 66: // F8
+    key = 0x41;
+    break;
+  case 67: // F9
+    key = 0x42;
+    break;
+  case 68: // F10
+    key = 0x43;
+    break;
+  case 69: // Pause
+    key = 0x48;
+    break;
+  case 87: // F11
+    key = 0x44;
+    break;
+  case 88: // F12
+    key = 0x45;
+    break;
+  case 311: // PrntScr
+    key = 0x46;
+    break;
+  case 338: // Insert
+    key = 0x49;
+    break;
+  case 339: // Delete
+    key = 0x4C;
+    break;
+  case 327: // Home
+    key = 0x4A;
+    break;
+  case 335: // End
+    key = 0x4D;
+    break;
+  case 329: // PageUp
+    key = 0x4B;
+    break;
+  case 337: // PageDown
+    key = 0x4E;
+    break;
+  case 331: // Left
+    key = 0x50;
+    break;
+  case 333: // Right
+    key = 0x4F;
+    break;
+  case 328: // Up
+    key = 0x52;
+    break;
+  case 336: // Down
+    key = 0x51;
+    break;
   }
 
-  LOG((CLOG_INFO "modifier: %d", m_modifier));
+  /*LOG((CLOG_INFO "modifier: %d", m_modifier));*/
 
   unsigned char report[4] = {m_modifier, 0, key, 0};
   int result = write(m_fd, report, sizeof(report));
@@ -198,8 +305,8 @@ void UsbKeyState::fakeKeyDown(KeyID id, KeyModifierMask mask,
 
 bool UsbKeyState::fakeKeyRepeat(KeyID id, KeyModifierMask mask, SInt32 count,
                                 KeyButton button) {
-  LOG((CLOG_INFO "UsbKeyState::fakeKeyRepeat(%d %d %d %d)", id, mask, count,
-       button));
+  /*LOG((CLOG_INFO "UsbKeyState::fakeKeyRepeat(%d %d %d %d)", id, mask, count,*/
+  /*     button));*/
 
   for (int i = 0; i < count; ++i) {
     fakeKeyUp(button);
@@ -210,7 +317,7 @@ bool UsbKeyState::fakeKeyRepeat(KeyID id, KeyModifierMask mask, SInt32 count,
 }
 
 bool UsbKeyState::fakeKeyUp(KeyButton button) {
-  LOG((CLOG_INFO "UsbKeyState::fakeKeyUp(%d)", button));
+  /*LOG((CLOG_INFO "UsbKeyState::fakeKeyUp(%d)", button));*/
 
   switch (button) {
   case 29: // LEFT_CTRL
@@ -246,6 +353,6 @@ bool UsbKeyState::fakeKeyUp(KeyButton button) {
     LOG((CLOG_INFO "Couldn't send keyboard report!\n"));
   }
 
-  LOG((CLOG_INFO "modifier: %d", m_modifier));
+  /*LOG((CLOG_INFO "modifier: %d", m_modifier));*/
   return true;
 }
