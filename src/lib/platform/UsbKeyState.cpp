@@ -181,6 +181,9 @@ void UsbKeyState::fakeKeyDown(KeyID id, KeyModifierMask mask,
   case 40: // '
     key = 0x34;
     break;
+  case 58: // CapsLock
+    key = 0x39;
+    break;
   }
 
   LOG((CLOG_INFO "modifier: %d", m_modifier));
