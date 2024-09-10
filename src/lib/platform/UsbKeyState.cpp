@@ -198,7 +198,14 @@ void UsbKeyState::fakeKeyDown(KeyID id, KeyModifierMask mask,
 
 bool UsbKeyState::fakeKeyRepeat(KeyID id, KeyModifierMask mask, SInt32 count,
                                 KeyButton button) {
-  LOG((CLOG_INFO "UsbKeyState::fakeKeyRepeat(%d %d %d)", id, mask, button));
+  LOG((CLOG_INFO "UsbKeyState::fakeKeyRepeat(%d %d %d %d)", id, mask, count,
+       button));
+
+  for (int i = 0; i < count; ++i) {
+    fakeKeyUp(button);
+    fakeKeyDown(id, mask, button);
+  }
+
   return true;
 }
 
