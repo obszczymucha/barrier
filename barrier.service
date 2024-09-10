@@ -1,0 +1,21 @@
+[Unit]
+Description=Start Barrier
+After=usb_gadget.service
+Requires=usb_gadget.service
+PartOf=usb_gadget.service
+
+[Service]
+;unbuffer fixes the startup issue
+;apt install expect (for /usr/bin/unbuffer)
+;create environment file with ENV_NAME=env_value format
+ExecStartPre=/bin/sleep 2
+EnvironmentFile=/etc/barrier.env
+ExecStart=/usr/bin/unbuffer /usr/local/bin/barrierc -f --name ${BARRIER_NAME} ${BARRIER_HOST}:${BARRIER_PORT}
+StandardOutput=journal
+StandardError=journal
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+
