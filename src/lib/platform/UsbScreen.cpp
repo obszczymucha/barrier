@@ -23,32 +23,27 @@ UsbScreen *UsbScreen::s_screen = NULL;
 UsbScreen::UsbScreen(IEventQueue *events)
     : PlatformScreen(events), m_isPrimary(false), m_isOnScreen(false), m_x(0),
       m_y(0), m_w(1920), m_h(1080), m_xCenter(1920 / 2), m_yCenter(1080 / 2),
-      m_xCursor(0), m_yCursor(0), m_events(events) {
-  assert(s_screen == NULL);
-
-  s_screen = this;
-
+      m_xCursor(0), m_yCursor(0), m_events(events), m_keyState(NULL) {
   try {
-    m_keyState = new UsbKeyState(m_events);
+    assert(s_screen == NULL);
+    s_screen = this;
+
+    m_keyState = new UsbKeyState(m_events, m_keyMap);
     m_fd = open("/dev/hidg0", O_RDWR);
   } catch (...) {
-    delete m_keyState;
+    if (m_keyState) {
+      delete m_keyState;
+    }
+
     s_screen = NULL;
     throw;
   }
-
-  // install event handlers
-  m_events->adoptHandler(
-      Event::kSystem, m_events->getSystemTarget(),
-      new TMethodEventJob<UsbScreen>(this, &UsbScreen::handleSystemEvent));
-
-  // install the platform event queue
-  /*m_events->adoptBuffer(new UsbEventQueueBuffer(m_events));*/
 }
 
 UsbScreen::~UsbScreen() {
   assert(s_screen != NULL);
 
+  delete m_keyState;
   m_events->adoptBuffer(NULL);
   m_events->removeHandler(Event::kSystem, m_events->getSystemTarget());
 

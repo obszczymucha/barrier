@@ -78,6 +78,7 @@ private:
 
   static UsbScreen *s_screen;
   IEventQueue *m_events;
+  barrier::KeyMap m_keyMap;
 
   // keyboard stuff
   UsbKeyState *m_keyState;
