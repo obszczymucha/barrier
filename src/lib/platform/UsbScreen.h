@@ -85,4 +85,5 @@ private:
 
 private:
   int m_fd;
+  int m_fd2;
 };

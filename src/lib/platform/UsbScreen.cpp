@@ -13,6 +13,7 @@
 #include "platform/UsbKeyState.h"
 
 #include <algorithm>
+#include <cstdint>
 #include <cstdlib>
 #include <cstring>
 #include <fcntl.h>
@@ -23,13 +24,15 @@ UsbScreen *UsbScreen::s_screen = NULL;
 UsbScreen::UsbScreen(IEventQueue *events)
     : PlatformScreen(events), m_isPrimary(false), m_isOnScreen(false), m_x(0),
       m_y(0), m_w(1920), m_h(1080), m_xCenter(1920 / 2), m_yCenter(1080 / 2),
-      m_xCursor(0), m_yCursor(0), m_events(events), m_keyState(NULL) {
+      m_xCursor(0), m_yCursor(0), m_events(events), m_keyState(NULL), m_fd(0),
+      m_fd2(0) {
   try {
     assert(s_screen == NULL);
     s_screen = this;
 
     m_keyState = new UsbKeyState(m_events, m_keyMap);
     m_fd = open("/dev/hidg0", O_RDWR);
+    m_fd2 = open("/dev/hidg2", O_RDWR);
   } catch (...) {
     if (m_keyState) {
       delete m_keyState;
@@ -49,6 +52,10 @@ UsbScreen::~UsbScreen() {
 
   if (m_fd) {
     close(m_fd);
+  }
+
+  if (m_fd2) {
+    close(m_fd2);
   }
 
   s_screen = NULL;
@@ -97,7 +104,27 @@ void UsbScreen::getCursorCenter(SInt32 &x, SInt32 &y) const {
 
 void UsbScreen::fakeMouseButton(ButtonID id, bool press) {}
 
-void UsbScreen::fakeMouseMove(SInt32 x, SInt32 y) {}
+void UsbScreen::fakeMouseMove(SInt32 x, SInt32 y) {
+  /*LOG((CLOG_INFO "Moving %lld %lld\n", x, y));*/
+  uint16_t rx = (uint16_t)((x * 32768LL) / 1920);
+  uint16_t ry = (uint16_t)((y * 32768LL) / 1080);
+
+  unsigned char report[6];
+  report[0] = 0;
+  report[1] = rx & 0xFF;
+  report[2] = (rx >> 8) & 0xFF;
+  report[3] = ry & 0xFF;
+  report[4] = (ry >> 8) & 0xFF;
+  report[5] = 0;
+
+  int result = write(m_fd2, report, sizeof(report));
+  m_x = x;
+  m_y = y;
+
+  if (result < 0) {
+    LOG((CLOG_INFO "Couldn't send mouse report!\n"));
+  }
+}
 
 void UsbScreen::fakeMouseRelativeMove(SInt32 dx, SInt32 dy) const {
   unsigned char report[4] = {0, static_cast<unsigned char>(dx),
