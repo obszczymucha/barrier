@@ -216,6 +216,9 @@ void UsbKeyState::fakeKeyDown(KeyID id, KeyModifierMask mask,
   case 53: // /
     key = 0x38;
     break;
+  case 57: // Spacebar
+    key = 0x2C;
+    break;
   case 58: // CapsLock
     key = 0x39;
     break;
