@@ -95,7 +95,9 @@ void UsbScreen::fakeInputEnd() {}
 
 SInt32 UsbScreen::getJumpZoneSize() const { return 1; }
 
-bool UsbScreen::isAnyMouseButtonDown(UInt32 &buttonID) const { return false; }
+bool UsbScreen::isAnyMouseButtonDown(UInt32 &buttonID) const {
+  return m_button != 0;
+}
 
 void UsbScreen::getCursorCenter(SInt32 &x, SInt32 &y) const {
   x = m_xCenter;
@@ -181,7 +183,8 @@ void UsbScreen::fakeMouseMove(SInt32 x, SInt32 y) {
 }
 
 void UsbScreen::fakeMouseRelativeMove(SInt32 dx, SInt32 dy) const {
-  unsigned char report[4] = {0, static_cast<unsigned char>(dx),
+  unsigned char report[4] = {static_cast<unsigned char>(m_button),
+                             static_cast<unsigned char>(dx),
                              static_cast<unsigned char>(dy), 0};
   int result = write(m_fd, report, sizeof(report));
 
@@ -193,7 +196,8 @@ void UsbScreen::fakeMouseRelativeMove(SInt32 dx, SInt32 dy) const {
 void UsbScreen::fakeMouseWheel(SInt32 xDelta, SInt32 yDelta) const {
   /*LOG((CLOG_INFO "UsgScreen::fakeMouseWheel(%d, %d)\n", xDelta, yDelta));*/
 
-  unsigned char report[4] = {0, 0, 0, static_cast<unsigned char>(yDelta)};
+  unsigned char report[4] = {static_cast<unsigned char>(m_button), 0, 0,
+                             static_cast<unsigned char>(yDelta)};
   int result = write(m_fd, report, sizeof(report));
 
   if (result < 0) {
