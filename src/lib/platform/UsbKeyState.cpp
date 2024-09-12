@@ -298,7 +298,7 @@ void UsbKeyState::fakeKeyDown(KeyID id, KeyModifierMask mask,
 
   /*LOG((CLOG_INFO "modifier: %d", m_modifier));*/
 
-  unsigned char report[4] = {m_modifier, 0, key, 0};
+  unsigned char report[8] = {m_modifier, 0, key, 0, 0, 0, 0, 0};
   int result = write(m_fd, report, sizeof(report));
 
   if (result < 0) {
@@ -349,7 +349,7 @@ bool UsbKeyState::fakeKeyUp(KeyButton button) {
     break;
   }
 
-  unsigned char report[4] = {m_modifier, 0, 0, 0};
+  unsigned char report[8] = {m_modifier, 0, 0, 0, 0, 0, 0, 0};
   int result = write(m_fd, report, sizeof(report));
 
   if (result < 0) {
