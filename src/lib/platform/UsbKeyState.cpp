@@ -32,13 +32,55 @@ void UsbKeyState::fakeKey(const Keystroke &k) {
   /*LOG((CLOG_INFO "UsbKeyState::fakeKey()"));*/
 }
 
+UInt8 map_key(KeyID id) {
+  switch (id) {
+  case 104:
+    return 0x0B;
+  case 108:
+    return 0x0F;
+  default:
+    return 0;
+  }
+}
+
+void UsbKeyState::send_key(unsigned char modifier, unsigned char key) {
+  unsigned char report[8] = {modifier, 0, key, 0, 0, 0, 0, 0};
+  int result = write(m_fd, report, sizeof(report));
+  if (result < 0) {
+    LOG((CLOG_INFO "Couldn't send keyboard report!\n"));
+  }
+}
+
+unsigned char map_mask(KeyModifierMask mask) {
+  switch (mask) {
+  case 16:
+    return 0x08; // LEFT_SUPER
+  default:
+    return 0;
+  }
+}
+
+void UsbKeyState::send_barrier_key(KeyID id, KeyModifierMask mask) {
+  UInt8 key = map_key(id);
+
+  if (key == 0) {
+    return;
+  }
+
+  unsigned char modifier = map_mask(mask);
+
+  send_key(modifier, key);
+}
+
 void UsbKeyState::fakeKeyDown(KeyID id, KeyModifierMask mask,
                               KeyButton button) {
   /*LOG((CLOG_INFO "UsbKeyState::fakeKeyDown(%d, %d, %d)", id, mask, button));*/
-
   UInt8 key = 0;
 
   switch (button) {
+  case 0:
+    send_barrier_key(id, mask);
+    return;
   case 29: // LEFT_CTRL
     m_modifier |= 0x01;
     break;
@@ -298,12 +340,7 @@ void UsbKeyState::fakeKeyDown(KeyID id, KeyModifierMask mask,
 
   /*LOG((CLOG_INFO "modifier: %d", m_modifier));*/
 
-  unsigned char report[8] = {m_modifier, 0, key, 0, 0, 0, 0, 0};
-  int result = write(m_fd, report, sizeof(report));
-
-  if (result < 0) {
-    LOG((CLOG_INFO "Couldn't send keyboard report!\n"));
-  }
+  send_key(m_modifier, key);
 }
 
 bool UsbKeyState::fakeKeyRepeat(KeyID id, KeyModifierMask mask, SInt32 count,

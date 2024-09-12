@@ -105,7 +105,7 @@ void UsbScreen::getCursorCenter(SInt32 &x, SInt32 &y) const {
 }
 
 void UsbScreen::fakeMouseButton(ButtonID id, bool press) {
-  /*LOG((CLOG_INFO "UsgScreen::fakeMouseButton(%d, %d)\n", id, press));*/
+  /*LOG((CLOG_INFO "UsbScreen::fakeMouseButton(%d, %d)\n", id, press));*/
 
   if (press) {
     switch (id) {
@@ -194,7 +194,7 @@ void UsbScreen::fakeMouseRelativeMove(SInt32 dx, SInt32 dy) const {
 }
 
 void UsbScreen::fakeMouseWheel(SInt32 xDelta, SInt32 yDelta) const {
-  /*LOG((CLOG_INFO "UsgScreen::fakeMouseWheel(%d, %d)\n", xDelta, yDelta));*/
+  /*LOG((CLOG_INFO "UsbScreen::fakeMouseWheel(%d, %d)\n", xDelta, yDelta));*/
 
   unsigned char report[4] = {static_cast<unsigned char>(m_button), 0, 0,
                              static_cast<unsigned char>(yDelta)};

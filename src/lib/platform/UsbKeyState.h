@@ -28,4 +28,8 @@ protected:
 private:
   int m_fd;
   UInt8 m_modifier;
+
+private:
+  void send_key(unsigned char modifier, unsigned char key);
+  void send_barrier_key(KeyID id, KeyModifierMask mask);
 };
