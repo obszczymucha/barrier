@@ -69,6 +69,7 @@ private:
   SInt32 m_w, m_h;
   SInt32 m_xCenter, m_yCenter;
   SInt8 m_button;
+  UInt8 m_screen;
 
 private:
   // true if screen is being used as a primary screen, false otherwise

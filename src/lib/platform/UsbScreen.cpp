@@ -23,9 +23,9 @@ UsbScreen *UsbScreen::s_screen = NULL;
 
 UsbScreen::UsbScreen(IEventQueue *events)
     : PlatformScreen(events), m_isPrimary(false), m_isOnScreen(false), m_x(0),
-      m_y(0), m_w(1920), m_h(1080), m_xCenter(1920 / 2), m_yCenter(1080 / 2),
-      m_xCursor(0), m_yCursor(0), m_button(0), m_events(events),
-      m_keyState(NULL), m_fd(0), m_fd2(0) {
+      m_y(0), m_w(1920 * 2), m_h(1080), m_xCenter(1920 / 2),
+      m_yCenter(1080 / 2), m_xCursor(0), m_yCursor(0), m_button(0), m_screen(0),
+      m_events(events), m_keyState(NULL), m_fd(0), m_fd2(0) {
   try {
     assert(s_screen == NULL);
     s_screen = this;
@@ -140,25 +140,44 @@ void UsbScreen::fakeMouseButton(ButtonID id, bool press) {
 }
 
 void UsbScreen::fakeMouseMove(SInt32 x, SInt32 y) {
-  /*LOG((CLOG_INFO "UsbScreen::fakeMouseMove(%lld, %lld)\n", x, y));*/
-  uint16_t rx = (uint16_t)((x * 32768LL) / 1920);
-  uint16_t ry = (uint16_t)((y * 32768LL) / 1080);
+  /*if (m_x <= 1920 && x >= 1920) {*/
+  /*  LOG((CLOG_INFO "UsbScreen::fakeMouseMove() skip right\n"));*/
+  /*  fakeMouseRelativeMove(20, 0);*/
+  /*  m_screen = 1;*/
+  /*} else if (m_x >= 1920 && x <= 1920) {*/
+  /*  LOG((CLOG_INFO "UsbScreen::fakeMouseMove() skip left\n"));*/
+  /*  fakeMouseRelativeMove(-20, 0);*/
+  /*  m_screen = 0;*/
+  /*}*/
+  /**/
+  /*int ax = x <= 1920 ? x : x - 1920;*/
+  /*uint16_t rx = (uint16_t)((ax * 32768LL) / m_w * 2);*/
+  /*uint16_t ry = (uint16_t)((y * 32768LL) / m_h);*/
+  /**/
+  /*LOG((CLOG_INFO "UsbScreen::fakeMouseMove(%lld, %lld, %lld, %lld)\n", x, y,
+   * rx,*/
+  /*     ry));*/
+  /**/
+  /*unsigned char report[6];*/
+  /*report[0] = 0;*/
+  /*report[1] = rx & 0xFF;*/
+  /*report[2] = (rx >> 8) & 0xFF;*/
+  /*report[3] = ry & 0xFF;*/
+  /*report[4] = (ry >> 8) & 0xFF;*/
+  /*report[5] = 0;*/
+  /**/
+  /*int result = write(m_fd2, report, sizeof(report));*/
+  /**/
+  /*if (result < 0) {*/
+  /*  LOG((CLOG_INFO "Couldn't send mouse report!\n"));*/
+  /*}*/
+  int dx = x - m_x;
+  int dy = y - m_y;
 
-  unsigned char report[6];
-  report[0] = 0;
-  report[1] = rx & 0xFF;
-  report[2] = (rx >> 8) & 0xFF;
-  report[3] = ry & 0xFF;
-  report[4] = (ry >> 8) & 0xFF;
-  report[5] = 0;
+  fakeMouseRelativeMove(dx, dy);
 
-  int result = write(m_fd2, report, sizeof(report));
   m_x = x;
   m_y = y;
-
-  if (result < 0) {
-    LOG((CLOG_INFO "Couldn't send mouse report!\n"));
-  }
 }
 
 void UsbScreen::fakeMouseRelativeMove(SInt32 dx, SInt32 dy) const {
