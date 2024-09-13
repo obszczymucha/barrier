@@ -203,9 +203,9 @@ void UsbScreen::fakeMouseWheel(SInt32 xDelta, SInt32 yDelta) const {
   SInt32 yd = yDelta;
 
   if (yd > 0) {
-    yd = m_keyState->is_ctrl_pressed() ? 20 : 5;
+    yd = m_keyState->is_alt_pressed() ? 20 : 5;
   } else if (yd < 0) {
-    yd = m_keyState->is_ctrl_pressed() ? -20 : -5;
+    yd = m_keyState->is_alt_pressed() ? -20 : -5;
   }
 
   unsigned char report[4] = {static_cast<unsigned char>(m_button), 0, 0,

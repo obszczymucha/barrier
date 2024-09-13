@@ -400,3 +400,11 @@ bool UsbKeyState::fakeKeyUp(KeyButton button) {
 bool UsbKeyState::is_ctrl_pressed() const {
   return m_modifier & 0x01 || m_modifier & 0x10;
 }
+
+bool UsbKeyState::is_shift_pressed() const {
+  return m_modifier & 0x02 || m_modifier & 0x20;
+}
+
+bool UsbKeyState::is_alt_pressed() const {
+  return m_modifier & 0x04 || m_modifier & 0x40;
+}
