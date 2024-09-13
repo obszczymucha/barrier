@@ -193,11 +193,23 @@ void UsbScreen::fakeMouseRelativeMove(SInt32 dx, SInt32 dy) const {
   }
 }
 
+/*
+ * In my current setup Barrier sends either 120 or -120 for yDelta.
+ * This is too much for MacOS, so I'm hardcoding some reasonable values.
+ */
 void UsbScreen::fakeMouseWheel(SInt32 xDelta, SInt32 yDelta) const {
   /*LOG((CLOG_INFO "UsbScreen::fakeMouseWheel(%d, %d)\n", xDelta, yDelta));*/
 
+  SInt32 yd = yDelta;
+
+  if (yd > 0) {
+    yd = m_keyState->is_ctrl_pressed() ? 20 : 5;
+  } else if (yd < 0) {
+    yd = m_keyState->is_ctrl_pressed() ? -20 : -5;
+  }
+
   unsigned char report[4] = {static_cast<unsigned char>(m_button), 0, 0,
-                             static_cast<unsigned char>(yDelta)};
+                             static_cast<unsigned char>(yd)};
   int result = write(m_fd, report, sizeof(report));
 
   if (result < 0) {

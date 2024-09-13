@@ -396,3 +396,7 @@ bool UsbKeyState::fakeKeyUp(KeyButton button) {
   /*LOG((CLOG_INFO "modifier: %d", m_modifier));*/
   return true;
 }
+
+bool UsbKeyState::is_ctrl_pressed() const {
+  return m_modifier & 0x01 || m_modifier & 0x10;
+}
