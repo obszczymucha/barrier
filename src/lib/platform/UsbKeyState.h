@@ -37,4 +37,5 @@ public:
   bool is_ctrl_pressed() const;
   bool is_shift_pressed() const;
   bool is_alt_pressed() const;
+  void reset();
 };

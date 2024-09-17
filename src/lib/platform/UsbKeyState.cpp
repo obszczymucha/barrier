@@ -408,3 +408,13 @@ bool UsbKeyState::is_shift_pressed() const {
 bool UsbKeyState::is_alt_pressed() const {
   return m_modifier & 0x04 || m_modifier & 0x40;
 }
+
+void UsbKeyState::reset() {
+  m_modifier = 0;
+  unsigned char report[8] = {m_modifier, 0, 0, 0, 0, 0, 0, 0};
+  int result = write(m_fd, report, sizeof(report));
+
+  if (result < 0) {
+    LOG((CLOG_INFO "Couldn't send keyboard report!\n"));
+  }
+}

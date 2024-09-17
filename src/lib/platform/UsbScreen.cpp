@@ -224,6 +224,7 @@ void UsbScreen::disable() { LOG((CLOG_INFO "UsbScreen::disable()")); }
 void UsbScreen::enter() {
   LOG((CLOG_INFO "UsbScreen::enter()"));
   m_isOnScreen = true;
+  m_keyState->reset();
 }
 
 bool UsbScreen::leave() {
