@@ -1,0 +1,8 @@
+[Unit]
+Description=Stop Barrier
+Requires=barrier.service
+
+[Service]
+Type=oneshot
+ExecStart=/bin/systemctl stop barrier.service
+

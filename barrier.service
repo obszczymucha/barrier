@@ -11,9 +11,11 @@ PartOf=usb_gadget.service
 ExecStartPre=/bin/sleep 2
 EnvironmentFile=/etc/barrier.env
 ExecStart=/usr/bin/unbuffer /usr/local/bin/barrierc -f --name ${BARRIER_NAME} ${BARRIER_HOST}:${BARRIER_PORT}
+ExecStop=killall barrierc
 StandardOutput=journal
 StandardError=journal
-Restart=always
+RemainAfterExit=yes
+;Restart=always
 RestartSec=5
 
 [Install]
