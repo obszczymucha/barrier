@@ -6,7 +6,7 @@ function main() {
   sudo systemctl enable barrier.timer
   sudo systemctl enable barrier_stop.timer
   sudo systemctl restart barrier.timer
-  sudo systemctl restart barriet_stop.timer
+  sudo systemctl restart barrier_stop.timer
 }
 
 main "$@"
