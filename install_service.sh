@@ -2,7 +2,7 @@
 # shellcheck disable=SC2155 # Declare and assign separately.
 
 function systemctl_property() {
-  systemctl show --property="$1" barrier.service | sed 's/.*=//'
+  systemctl show --property="$2" barrier."$1" | sed 's/.*=//'
 }
 
 function main() {
@@ -13,15 +13,13 @@ function main() {
   sudo systemctl restart barrier.timer
   sudo systemctl restart barrier_stop.timer
 
-  echo "barrier.service status:" >&2
+  local loaded=$(systemctl_property "service" "LoadState")
+  local active=$(systemctl_property "service" "ActiveState")
+  local triggered_by=$(systemctl_property "service" "TriggeredBy")
+  local next_trigger=$(systemctl_property "timer" "NextElapseUSecRealtime")
 
-  local loaded=$(systemctl_property "LoadState")
-  local active=$(systemctl_property "ActiveState")
-  local triggered_by=$(systemctl_property "TriggeredBy")
-  local next_trigger=$(systemctl_property "NextElapseUSecRealtime")
-
-  echo "Status: $active ($loaded)"
-  echo "Next trigger: $next_trigger ($triggered_by)"
+  echo "barrier.service status: $active ($loaded)" >&2
+  echo "Next trigger: $next_trigger (by $triggered_by)" >&2
 }
 
 main "$@"
