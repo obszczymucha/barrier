@@ -2,7 +2,7 @@
 Description=Timer to stop Barrier service
 
 [Timer]
-OnCalendar=*-*-* 17:00:00
+OnCalendar=weekday 17:00:00
 Unit=barrier_stop.service
 
 [Install]

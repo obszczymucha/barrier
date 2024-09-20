@@ -2,7 +2,7 @@
 Description=Timer to start Barrier service
 
 [Timer]
-OnCalendar=*-*-* 08:00:00
+OnCalendar=weekday 08:00:00
 
 [Install]
 WantedBy=timers.target
