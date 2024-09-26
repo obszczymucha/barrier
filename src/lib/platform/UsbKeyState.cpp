@@ -74,7 +74,6 @@ void UsbKeyState::send_barrier_key(KeyID id, KeyModifierMask mask) {
 
 void UsbKeyState::fakeKeyDown(KeyID id, KeyModifierMask mask,
                               KeyButton button) {
-  /*LOG((CLOG_INFO "UsbKeyState::fakeKeyDown(%d, %d, %d)", id, mask, button));*/
   UInt8 key = 0;
 
   switch (button) {
@@ -338,6 +337,25 @@ void UsbKeyState::fakeKeyDown(KeyID id, KeyModifierMask mask,
     break;
   }
 
+  // Do some remap for the fucking annoying MacOS.
+  if (is_alt_pressed()) {
+    switch (key) {
+    case 0x0B:           // H
+      send_key(0, 0x50); // Left
+      return;
+    case 0x0D:           // J
+      send_key(0, 0x51); // Down
+      return;
+    case 0x0E:           // K
+      send_key(0, 0x52); // Up
+      return;
+    case 0x0F:           // K
+      send_key(0, 0x4F); // Right
+      return;
+    }
+  }
+
+  /*LOG((CLOG_INFO "UsbKeyState::fakeKeyDown(%d, %d, %d)", id, mask, button));*/
   /*LOG((CLOG_INFO "modifier: %d", m_modifier));*/
 
   send_key(m_modifier, key);
