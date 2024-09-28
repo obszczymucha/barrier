@@ -8,7 +8,6 @@ PartOf=usb_gadget.service
 ;unbuffer fixes the startup issue
 ;apt install expect (for /usr/bin/unbuffer)
 ;create environment file with ENV_NAME=env_value format
-ExecStartPre=/bin/sleep 2
 EnvironmentFile=/etc/barrier.env
 ExecStart=/usr/bin/unbuffer /usr/local/bin/barrierc -f --name ${BARRIER_NAME} ${BARRIER_HOST}:${BARRIER_PORT}
 ExecStop=killall barrierc

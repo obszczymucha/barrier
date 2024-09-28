@@ -8,6 +8,7 @@ function systemctl_property() {
 function main() {
   sudo cp service/* /etc/systemd/system/
   sudo systemctl daemon-reload
+  sudo systemctl enable barrier.service
   sudo systemctl enable barrier.timer
   sudo systemctl enable barrier_stop.timer
   sudo systemctl restart barrier.timer

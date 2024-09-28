@@ -3,6 +3,8 @@ Description=Timer to start Barrier service
 
 [Timer]
 OnCalendar=Mon-Fri 08:00:00
+Persistent=true
+Unit=barrier.service
 
 [Install]
 WantedBy=timers.target
