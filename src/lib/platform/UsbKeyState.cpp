@@ -338,20 +338,22 @@ void UsbKeyState::fakeKeyDown(KeyID id, KeyModifierMask mask,
   }
 
   // Do some remap for the fucking annoying MacOS.
-  if (is_alt_pressed() && !is_ctrl_pressed() && !is_shift_pressed() &&
+  if (is_alt_pressed() && !is_ctrl_pressed() &&
       !is_super_pressed()) {
+    UInt8 modifier = is_shift_pressed() ? 0x02 : 0;
+
     switch (key) {
     case 0x0B:           // H
-      send_key(0, 0x50); // Left
+      send_key(modifier, 0x50); // Left
       return;
     case 0x0D:           // J
-      send_key(0, 0x51); // Down
+      send_key(modifier, 0x51); // Down
       return;
     case 0x0E:           // K
-      send_key(0, 0x52); // Up
+      send_key(modifier, 0x52); // Up
       return;
     case 0x0F:           // K
-      send_key(0, 0x4F); // Right
+      send_key(modifier, 0x4F); // Right
       return;
     }
   }
