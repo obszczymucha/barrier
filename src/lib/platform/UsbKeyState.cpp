@@ -378,7 +378,7 @@ bool UsbKeyState::fakeKeyRepeat(KeyID id, KeyModifierMask mask, SInt32 count,
 }
 
 bool UsbKeyState::fakeKeyUp(KeyButton button) {
-  /*LOG((CLOG_INFO "UsbKeyState::fakeKeyUp(%d)", button));*/
+  LOG((CLOG_INFO "UsbKeyState::fakeKeyUp(%d)", button));
 
   switch (button) {
   case 37: // LEFT_CTRL
