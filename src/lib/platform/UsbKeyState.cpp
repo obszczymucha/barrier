@@ -360,6 +360,7 @@ void UsbKeyState::fakeKeyDown(KeyID id, KeyModifierMask mask,
     }
   }
 
+  LOG((CLOG_INFO "About to send_key: modifier=%d, key=%d", m_modifier, key));
   send_key(m_modifier, key);
 }
 
