@@ -44,6 +44,7 @@ UInt8 map_key(KeyID id) {
 }
 
 void UsbKeyState::send_key(unsigned char modifier, unsigned char key) {
+  LOG((CLOG_INFO "send_key called: modifier=%d, key=%d, fd=%d", modifier, key, m_fd));
   unsigned char report[8] = {modifier, 0, key, 0, 0, 0, 0, 0};
   int result = write(m_fd, report, sizeof(report));
   if (result < 0) {
