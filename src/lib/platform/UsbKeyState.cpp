@@ -77,7 +77,7 @@ void UsbKeyState::fakeKeyDown(KeyID id, KeyModifierMask mask,
                               KeyButton button) {
   UInt8 key = 0;
 
-  LOG((CLOG_INFO "UsbKeyState::fakeKeyDown(%d, %d, %d) modifier: %s", id, mask, button, m_modifier));
+  LOG((CLOG_INFO "UsbKeyState::fakeKeyDown(%d, %d, %d) modifier: %d", id, mask, button, m_modifier));
 
   switch (button) {
   case 0:
