@@ -1244,6 +1244,14 @@ void Config::parseAction(ConfigReadContext& s, const std::string& name,
 		action = new InputFilter::KeyboardBroadcastAction(m_events, mode, screens);
 	}
 
+	else if (name == "runScript") {
+		if (args.size() != 1) {
+			throw XConfigRead(s, "syntax for action: runScript(path)");
+		}
+
+		action = new InputFilter::RunScriptAction(m_events, args[0]);
+	}
+
 	else {
 		throw XConfigRead(s, "unknown action argument \"%{1}\"", name);
 	}

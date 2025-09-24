@@ -660,6 +660,45 @@ InputFilter::MouseButtonAction::formatName() const
     return (m_press ? "mouseDown" : "mouseUp");
 }
 
+InputFilter::RunScriptAction::RunScriptAction(IEventQueue* events,
+                                            const std::string& script) :
+    m_script(script),
+    m_events(events)
+{
+    // do nothing
+}
+
+std::string InputFilter::RunScriptAction::getScript() const
+{
+    return m_script;
+}
+
+InputFilter::Action*
+InputFilter::RunScriptAction::clone() const
+{
+    return new RunScriptAction(*this);
+}
+
+std::string InputFilter::RunScriptAction::format() const
+{
+    return barrier::string::sprintf("runScript(\"%s\")", m_script.c_str());
+}
+
+void
+InputFilter::RunScriptAction::perform(const Event& event)
+{
+    LOG((CLOG_DEBUG "executing script: %s", m_script.c_str()));
+
+    // Execute the script using system()
+    int result = std::system(m_script.c_str());
+
+    if (result == 0) {
+        LOG((CLOG_DEBUG "script executed successfully: %s", m_script.c_str()));
+    } else {
+        LOG((CLOG_WARN "script execution failed with code %d: %s", result, m_script.c_str()));
+    }
+}
+
 //
 // InputFilter::Rule
 //
